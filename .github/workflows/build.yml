@@ -320,9 +320,16 @@ jobs:
           wget https://github.com/unicode-org/icu/releases/download/release-${URL_VERSION}/icu4c-${TGZ_VERSION}-src.tgz
           tar -xzf icu4c-${TGZ_VERSION}-src.tgz
           cd icu/source
-          ./configure --prefix=/usr/local --enable-static --disable-shared CFLAGS="-fPIC" CXXFLAGS="-fPIC" LIBS="-lc++"
-          make -j$(nproc) CFLAGS="-fPIC" CXXFLAGS="-fPIC" LIBS="-lc++"
+
+          export CFLAGS="-I/usr/local/include -L/usr/local/lib -L/usr/lib/x86_64-linux-gnu -fPIC"
+          export CXXFLAGS=$CFLAGS
+          export LIBS="-lc++"
+
+          ./configure --prefix=/usr/local --enable-static --disable-shared
+          make -j$(nproc)
           sudo make install
+
+          export CFLAGS=""; export CXXFLAGS=""; export LIBS=""
 
       - name: Show tool versions (Windows)
         if: runner.os == 'Windows'
