@@ -285,13 +285,13 @@ jobs:
           
           cat > /usr/local/bin/zig-cc << EOF
           #!/bin/bash
-          exec $ZIG_PATH cc -target x86_64-linux-musl -static -L/usr/local/lib -L/usr/lib/x86_64-linux-gnu "\$@"
+          exec $ZIG_PATH cc -target x86_64-linux-musl -static -I/usr/local/include -L/usr/local/lib -L/usr/lib/x86_64-linux-gnu "\$@"
           EOF
           chmod +x /usr/local/bin/zig-cc
           
           cat > /usr/local/bin/zig-cxx << EOF
           #!/bin/bash
-          exec $ZIG_PATH c++ -target x86_64-linux-musl -static -L/usr/local/lib -L/usr/lib/x86_64-linux-gnu "\$@"
+          exec $ZIG_PATH c++ -target x86_64-linux-musl -static -I/usr/local/include -L/usr/local/lib -L/usr/lib/x86_64-linux-gnu "\$@"
           EOF
           chmod +x /usr/local/bin/zig-cxx
           
@@ -321,7 +321,7 @@ jobs:
           tar -xzf icu4c-${TGZ_VERSION}-src.tgz
           cd icu/source
           ./configure --prefix=/usr/local --enable-static --disable-shared CFLAGS="-fPIC" CXXFLAGS="-fPIC" LIBS="-lc++"
-          make -j$(nproc)
+          make -j$(nproc) CFLAGS="-fPIC" CXXFLAGS="-fPIC" LIBS="-lc++"
           sudo make install
 
       - name: Show tool versions (Windows)
