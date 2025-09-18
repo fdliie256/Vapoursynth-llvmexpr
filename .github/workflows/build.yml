@@ -323,13 +323,14 @@ jobs:
 
           export CFLAGS="-I/usr/local/include -L/usr/local/lib -L/usr/lib/x86_64-linux-gnu -fPIC"
           export CXXFLAGS=$CFLAGS
+          export LDFLAGS="-Wl,-Bsymbolic"
           export LIBS="-lc++"
 
           ./configure --prefix=/usr/local --enable-static --disable-shared
           make -j$(nproc)
           sudo make install
 
-          export CFLAGS=""; export CXXFLAGS=""; export LIBS=""
+          export CFLAGS=""; export CXXFLAGS=""; export LIBS=""; export LDFLAGS=""
 
       - name: Show tool versions (Windows)
         if: runner.os == 'Windows'
