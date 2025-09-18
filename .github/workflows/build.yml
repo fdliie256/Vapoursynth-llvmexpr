@@ -297,6 +297,8 @@ jobs:
           
           echo "CC=/usr/local/bin/zig-cc" >> $GITHUB_ENV
           echo "CXX=/usr/local/bin/zig-cxx" >> $GITHUB_ENV
+          echo "AR=$ZIG_PATH ar"            >> $GITHUB_ENV
+          echo "RANLIB=$ZIG_PATH ranlib"    >> $GITHUB_ENV
 
       - name: Build and install zlib with PIC (linux musl)
         if: runner.os == 'Linux' && matrix.libc == 'musl'
@@ -312,7 +314,7 @@ jobs:
       - name: Build and install ICU with PIC (linux musl)
         if: runner.os == 'Linux' && matrix.libc == 'musl'
         run: |
-          ICU_VERSION="76.1"
+          ICU_VERSION="75.1"
           MAJOR=$(echo $ICU_VERSION | cut -d. -f1)
           MINOR=$(echo $ICU_VERSION | cut -d. -f2)
           URL_VERSION="${MAJOR}-${MINOR}"
@@ -323,14 +325,13 @@ jobs:
 
           export CFLAGS="-I/usr/local/include -L/usr/local/lib -L/usr/lib/x86_64-linux-gnu -fPIC"
           export CXXFLAGS=$CFLAGS
-          export LDFLAGS="-Wl,-Bsymbolic"
           export LIBS="-lc++"
 
           ./configure --prefix=/usr/local --enable-static --disable-shared
           make -j$(nproc)
           sudo make install
 
-          export CFLAGS=""; export CXXFLAGS=""; export LIBS=""; export LDFLAGS=""
+          export CFLAGS=""; export CXXFLAGS=""; export LIBS=""
 
       - name: Show tool versions (Windows)
         if: runner.os == 'Windows'
